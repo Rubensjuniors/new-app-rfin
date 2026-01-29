@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PaymentCardType {
+  CREDIT
+  DEBIT
+  BOTH
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  email     String   @unique
+  password  String
+  avatar    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  paymentCards PaymentCard[]
+  categories   Category[]
+  transactions Transaction[]
+  installments Installment[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model PaymentCard {
+  id    String          @id @default(uuid()) @db.Uuid
+  bank  String
+  name  String
+  color String?
+  icon  String?
+  type  PaymentCardType
+
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  transactions Transaction[]
+
+  @@unique([userId, name])
+  @@index([userId])
+  @@index([userId, name])
+  @@map("payment_cards")
+}
+
+model Category {
+  id    String  @id @default(uuid()) @db.Uuid
+  name  String
+  color String?
+  icon  String?
+
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  transactions Transaction[]
+
+  @@unique([userId, name])
+  @@index([userId])
+  @@index([userId, name])
+  @@map("categories")
+}
+
+model Transaction {
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String
+  amount        Float
+  date          DateTime
+  type          TransactionType
+  isPaid        Boolean         @default(false) @map("is_paid")
+  isFixed       Boolean         @default(false) @map("is_fixed")
+
+  userId        String       @map("user_id") @db.Uuid
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paymentCardId String?      @map("payment_card_id") @db.Uuid
+  paymentCard   PaymentCard? @relation(fields: [paymentCardId], references: [id], onDelete: Cascade)
+  categoryId    String?      @map("category_id") @db.Uuid
+  category      Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  installments Installment[]
+
+  @@index([userId])
+  @@index([userId, date])
+  @@index([userId, type])
+  @@index([userId, isPaid])
+  @@map("transactions")
+}
+
+model Installment {
+  id                String   @id @default(uuid()) @db.Uuid
+  InstallmentNumber Int      @map("installment_number")
+  amount            Float
+  date              DateTime @map("due_date")
+  isPaid            Boolean  @default(false) @map("is_paid")
+
+  transactionId String      @map("transaction_id") @db.Uuid
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  userId        String      @map("user_id") @db.Uuid
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([transactionId, date])
+  @@map("installments")
+}
