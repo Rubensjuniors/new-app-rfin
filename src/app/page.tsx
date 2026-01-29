@@ -1,3 +1,10 @@
+import { Button } from '@/shared/components/ui/button'
+
 export default function Home() {
-  return <div>Ola</div>
+  return (
+    <div>
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <Button>Click me</Button>
+    </div>
+  )
 }

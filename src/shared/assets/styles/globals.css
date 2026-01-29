@@ -1,0 +1,217 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-secondary: var(--sidebar-secondary);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-income: var(--income);
+  --color-income-foreground: var(--income-foreground);
+  --color-expense: var(--expense);
+  --color-expense-foreground: var(--expense-foreground);
+
+  --font-sans: 'DM Sans', 'sans-serif';
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Background & Foreground - Branco neutro */
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0.01 250);
+
+  /* Card */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0.01 250);
+
+  /* Popover */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.01 250);
+
+  /* Primary - Verde principal */
+  --primary: oklch(0.7073 0.1551 154.27);
+  --primary-foreground: oklch(1 0 0);
+
+  /* Secondary */
+  --secondary: oklch(0.96 0.005 250);
+  --secondary-foreground: oklch(0.15 0.01 250);
+
+  /* Muted */
+  --muted: oklch(0.96 0.005 250);
+  --muted-foreground: oklch(0.45 0.01 250);
+
+  /* Accent */
+  --accent: oklch(0.96 0.005 250);
+  --accent-foreground: oklch(0.15 0.01 250);
+
+  /* Destructive */
+  --destructive: oklch(0.58 0.22 25);
+  --destructive-foreground: oklch(1 0 0);
+
+  /* Success */
+  --success: oklch(0.6 0.15 145);
+  --success-foreground: oklch(1 0 0);
+
+  /* Warning */
+  --warning: oklch(0.75 0.18 75);
+  --warning-foreground: oklch(0.2 0.02 75);
+
+  /* Border, Input, Ring */
+  --border: oklch(0.92 0.005 250);
+  --input: oklch(0.92 0.005 250);
+  --ring: oklch(0.5 0.12 145);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.6 0.15 145);
+  --chart-2: oklch(0.58 0.14 200);
+  --chart-3: oklch(0.5 0.12 280);
+  --chart-4: oklch(0.75 0.18 75);
+  --chart-5: oklch(0.58 0.22 25);
+
+  /* Sidebar - Light */
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0.15 0.01 250);
+  --sidebar-primary: oklch(0.5 0.12 145);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.96 0.005 250);
+  --sidebar-accent-foreground: oklch(0.15 0.01 250);
+  --sidebar-border: oklch(0.92 0.005 250);
+  --sidebar-ring: oklch(0.5 0.12 145);
+  --sidebar-secondary: oklch(0.96 0.005 250);
+
+  /* Custom - Income & Expense */
+  --income: oklch(0.7145 0.1675 153.37);
+  --income-foreground: oklch(1 0 0);
+  --expense: oklch(0.647 0.177 23.44);
+  --expense-foreground: oklch(1 0 0);
+}
+
+.dark {
+  /* Background & Foreground - Neutral dark gray */
+  --background: oklch(0.1864 0.0088 264.34);
+  --foreground: oklch(0.9612 0 0);
+
+  /* Card */
+  --card: oklch(0.2217 0.0126 264.28);
+  --card-foreground: oklch(0.9612 0 0);
+
+  /* Popover */
+  --popover: oklch(0.2217 0.0126 264.28);
+  --popover-foreground: oklch(0.9612 0 0);
+
+  /* Primary - Verde vibrante */
+  --primary: oklch(0.7073 0.1551 154.27);
+  --primary-foreground: oklch(0.1864 0.0088 264.34);
+
+  /* Secondary */
+  --secondary: oklch(0.2772 0.0154 269.12);
+  --secondary-foreground: oklch(0.9612 0 0);
+
+  /* Muted */
+  --muted: oklch(0.2772 0.0154 269.12);
+  --muted-foreground: oklch(0.6382 0.023 261.74);
+
+  /* Accent */
+  --accent: oklch(0.65 0.16 145);
+  --accent-foreground: oklch(0.95 0 0);
+
+  /* Destructive */
+  --destructive: oklch(0.65 0.2 25);
+  --destructive-foreground: oklch(1 0 0);
+
+  /* Success */
+  --success: oklch(0.68 0.17 145);
+  --success-foreground: oklch(1 0 0);
+
+  /* Warning */
+  --warning: oklch(0.75 0.18 75);
+  --warning-foreground: oklch(0.2 0.02 75);
+
+  /* Border, Input, Ring */
+  --border: oklch(0.32 0.01 250);
+  --input: oklch(0.32 0.01 250);
+  --ring: oklch(0.7 0.18 145);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.7 0.18 145);
+  --chart-2: oklch(0.65 0.16 130);
+  --chart-3: oklch(0.75 0.18 75);
+  --chart-4: oklch(0.6 0.15 160);
+  --chart-5: oklch(0.65 0.2 25);
+
+  /* Sidebar */
+  --sidebar: oklch(0.1676 0.0071 258.37);
+  --sidebar-foreground: oklch(0.9612 0 0);
+  --sidebar-primary: oklch(0.7073 0.1551 154.27);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.2303 0.0125 264.29);
+  --sidebar-accent-foreground: oklch(0.9612 0 0);
+  --sidebar-border: oklch(0.2621 0.0095 248.19);
+  --sidebar-ring: oklch(0.7073 0.1551 154.27);
+  --sidebar-secondary: oklch(0.2621 0.0095 248.19);
+
+  /* Custom - Income & Expense */
+  --income: oklch(0.7145 0.1675 153.37);
+  --income-foreground: oklch(0.15 0.02 145);
+  --expense: oklch(0.647 0.177 23.44);
+  --expense-foreground: oklch(0.15 0.02 25);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE e Edge antigo */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
