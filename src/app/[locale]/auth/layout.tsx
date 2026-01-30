@@ -47,7 +47,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-8 text-center">
             <div>
-              <Image src="public/icons/logo.svg" alt="rfin" width={10} height={10} className="mx-auto mb-4" />
+              <Image src="/icons/logo.svg" alt="rfin" width={48} height={48} className="mx-auto mb-4" />
             </div>
             <h2 className="text-2xl font-bold text-foreground">{t('auth.layout.mobile.title')}</h2>
             <p className="text-muted-foreground mt-2">{t('auth.layout.mobile.description')}</p>
