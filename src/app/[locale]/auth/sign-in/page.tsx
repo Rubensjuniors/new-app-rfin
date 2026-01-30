@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl'
 
+import SignInForm from '@/client/modules/auth/components/SignInForm'
 import { Card } from '@/client/shared/components/ui/Card'
 import { Tabs } from '@/client/shared/components/ui/Tabs'
 
@@ -14,12 +15,11 @@ export default function SignInPage() {
             <Tabs.Trigger value="sign-up">{t('general.signUp')}</Tabs.Trigger>
           </Tabs.List>
 
-          <Tabs.Content value="sign-in">
-            {/* Sign In Form Component */}
-            <div>Sign In Form Goes Here</div>
+          <Tabs.Content value="sign-in" className="w-full">
+            <SignInForm />
           </Tabs.Content>
 
-          <Tabs.Content value="sign-up">
+          <Tabs.Content value="sign-up" className="w-full">
             {/* Sign Up Form Component */}
             <div>Sign Up Form Goes Here</div>
           </Tabs.Content>
