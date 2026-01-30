@@ -1,19 +1,19 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { signIn, signOut } from 'next-auth/react'
+import { useParams, useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import { useState } from 'react'
-
-import { Button } from '../ui/button'
 
 export const LoginForm = () => {
   const router = useRouter()
+  const params = useParams()
+  const locale = (params.locale as string) || 'en'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
@@ -28,7 +28,7 @@ export const LoginForm = () => {
       if (result?.error) {
         setError('Credenciais inválidas')
       } else {
-        router.push('/')
+        router.push(`/${locale}/dashboard`)
         router.refresh()
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,7 +40,7 @@ export const LoginForm = () => {
   }
 
   const handleOAuthSignIn = (provider: string) => {
-    signIn(provider, { callbackUrl: '/' })
+    signIn(provider, { callbackUrl: `/${locale}/dashboard` })
   }
 
   return (
@@ -111,8 +111,6 @@ export const LoginForm = () => {
           </button>
         </div>
       </div>
-
-      <Button onClick={() => signOut({ callbackUrl: '/login' })}>Sair</Button>
     </div>
   )
 }

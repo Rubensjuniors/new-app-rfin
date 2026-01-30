@@ -10,6 +10,9 @@ import prisma from './prisma'
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt'
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -55,12 +58,53 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
+  session: {
+    strategy: 'jwt'
+  },
   callbacks: {
-    async session({ session, user }) {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+      }
+      return token
+    },
+    async session({ session, token }) {
       if (session?.user) {
-        session.user.id = user.id
+        session.user.id = token.id as string
       }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      // Se a URL já contém um locale válido, use-a
+      if (url.startsWith('/')) {
+        // URL relativa
+        const segments = url.split('/').filter(Boolean)
+        const firstSegment = segments[0]
+
+        // Se já tem locale, redireciona para dashboard
+        if (firstSegment === 'en' || firstSegment === 'pt-br') {
+          return `${baseUrl}/${firstSegment}/dashboard`
+        }
+
+        // Caso contrário, adiciona locale padrão
+        return `${baseUrl}/en/dashboard`
+      }
+
+      // URL absoluta - verifica se é do mesmo domínio
+      if (url.startsWith(baseUrl)) {
+        const path = url.replace(baseUrl, '')
+        const segments = path.split('/').filter(Boolean)
+        const firstSegment = segments[0]
+
+        if (firstSegment === 'en' || firstSegment === 'pt-br') {
+          return `${baseUrl}/${firstSegment}/dashboard`
+        }
+
+        return `${baseUrl}/en/dashboard`
+      }
+
+      // Fallback para dashboard com locale padrão
+      return `${baseUrl}/en/dashboard`
     }
   },
   pages: {
