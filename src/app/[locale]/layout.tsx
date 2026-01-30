@@ -40,7 +40,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <meta
           name="viewport"

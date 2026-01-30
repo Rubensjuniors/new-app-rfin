@@ -1,18 +1,19 @@
 import { Moon, Sun } from 'lucide-react'
-import { useMemo } from 'react'
+import { useTheme } from 'next-themes'
 
 import { cn } from '@/client/lib/utils'
-import { useTheme } from '@/client/shared/contexts/ThemeContext'
 
-import { Button } from '../button'
+import { Button } from '../Button'
 
 export function ButtonToggleTheme({ className }: React.HTMLAttributes<HTMLButtonElement>) {
   const { setTheme, theme } = useTheme()
 
-  const currentThem = useMemo(() => (theme === 'dark' ? 'light' : 'dark'), [theme])
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
 
   return (
-    <Button className={cn(className)} variant="outline" size="icon" onClick={() => setTheme(currentThem)}>
+    <Button className={cn(className)} variant="outline" size="icon" onClick={toggleTheme}>
       <Sun
         data-testid="sun-icon"
         className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"

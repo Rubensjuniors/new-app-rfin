@@ -1,8 +1,7 @@
 'use client'
 
 import { SessionProvider } from 'next-auth/react'
-
-import { ThemeProvider } from '../shared/contexts/ThemeContext'
+import { ThemeProvider } from 'next-themes'
 
 type Props = {
   children?: React.ReactNode
@@ -11,7 +10,9 @@ type Props = {
 export const Providers = ({ children }: Props) => {
   return (
     <SessionProvider>
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="rfin-ui-theme">
+        {children}
+      </ThemeProvider>
     </SessionProvider>
   )
 }
