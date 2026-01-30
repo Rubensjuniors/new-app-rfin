@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getToken } from 'next-auth/jwt'
 import createMiddleware from 'next-intl/middleware'
 
 import { defaultLocale, locales } from '../i18n/config'
+import { localeMapping } from './client/config/locale'
+import {
+  determineBrowserLocale,
+  getFallbackLocale,
+  getPathnameSegments,
+  isPublicRoute
+} from './client/config/middleware-helpers'
 
 const intlMiddleware = createMiddleware({
   locales,
@@ -9,25 +17,29 @@ const intlMiddleware = createMiddleware({
   localePrefix: 'always'
 })
 
-const localeMapping: Record<string, string> = {
-  pt: 'pt-br'
-}
-
-const browserLocaleMapping: Record<string, string> = {
-  pt: 'pt-br',
-  'pt-br': 'pt-br',
-  pt_br: 'pt-br',
-  'pt-BR': 'pt-br',
-  en: 'en',
-  'en-us': 'en',
-  en_us: 'en',
-  'en-US': 'en'
-}
-
-export default function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  const pathnameSegments = pathname.split('/').filter(Boolean)
+  const pathnameSegments = getPathnameSegments(pathname)
   const firstSegment = pathnameSegments[0]
+
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET
+  })
+
+  const isPublic = isPublicRoute(pathname)
+
+  if (!token && !isPublic && locales.includes(firstSegment)) {
+    return NextResponse.redirect(new URL(`/${firstSegment}/auth/sign-in`, request.url))
+  }
+
+  if (token && isPublic && locales.includes(firstSegment)) {
+    return NextResponse.redirect(new URL(`/${firstSegment}/dashboard`, request.url))
+  }
+
+  if (locales.includes(firstSegment) && pathnameSegments.length === 1) {
+    return NextResponse.redirect(new URL(`/${firstSegment}/dashboard`, request.url))
+  }
 
   if (locales.includes(firstSegment)) {
     return intlMiddleware(request)
@@ -53,29 +65,11 @@ export default function middleware(request: NextRequest) {
   }
 
   if (!pathname || pathname === '/') {
-    const acceptLanguage = request.headers.get('accept-language')
-    let determinedLocale = defaultLocale
-
-    if (acceptLanguage) {
-      const browserLocale = acceptLanguage.split(',')[0].trim().toLowerCase()
-
-      if (browserLocaleMapping[browserLocale]) {
-        determinedLocale = browserLocaleMapping[browserLocale]
-      } else {
-        const localeKey = Object.keys(browserLocaleMapping).find((key) => browserLocale.startsWith(key))
-        if (localeKey) {
-          determinedLocale = browserLocaleMapping[localeKey]
-        }
-      }
-    }
-
+    const determinedLocale = determineBrowserLocale(request)
     return NextResponse.redirect(new URL(`/${determinedLocale}${pathname}`, request.url))
   }
 
-  const savedLocale = request.cookies.get('NEXT_LOCALE')
-  const fallbackLocale =
-    savedLocale && locales.includes(savedLocale.value) ? savedLocale.value : defaultLocale
-
+  const fallbackLocale = getFallbackLocale(request)
   return NextResponse.redirect(new URL(`/${fallbackLocale}${pathname}`, request.url))
 }
 
