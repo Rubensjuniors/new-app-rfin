@@ -1,6 +1,8 @@
 {
   "general": {
-    "copyright": "© 2024 rfin. Todos os direitos reservados."
+    "copyright": "© 2024 rfin. Todos os direitos reservados.",
+    "signIn": "Entrar",
+    "signUp": "Criar Conta"
   },
   "auth": {
     "layout": {

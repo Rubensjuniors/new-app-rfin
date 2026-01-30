@@ -52,7 +52,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
             <h2 className="text-2xl font-bold text-foreground">{t('auth.layout.mobile.title')}</h2>
             <p className="text-muted-foreground mt-2">{t('auth.layout.mobile.description')}</p>
           </div>
-          v<div>{children}</div>
+          <div>{children}</div>
           <p className="text-center text-sm text-muted-foreground mt-6">{t('general.copyright')}</p>
         </div>
       </div>
