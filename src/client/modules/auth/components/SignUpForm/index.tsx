@@ -12,16 +12,11 @@ import { Input } from '@/client/shared/components/ui/Form'
 
 export default function SignUpForm() {
   const t = useTranslations()
-  // TODO: Ir Para um context
   const [showPassword, setShowPassword] = useState(false)
-  // TODO: tirar simulador de loading
-  const [isLoading, setIsLoading] = useState(false)
+  const isLoading = false
 
   const handleSignUp = async(e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    // Simulate loading
-    setTimeout(() => setIsLoading(false), 1500)
   }
 
   return (
