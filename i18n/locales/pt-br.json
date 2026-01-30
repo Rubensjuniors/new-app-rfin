@@ -1,0 +1,61 @@
+{
+  "general": {
+    "copyright": "© 2024 rfin. Todos os direitos reservados."
+  },
+  "auth": {
+    "layout": {
+      "title": "Controle suas finanças",
+      "titleHighlight": "de forma simples",
+      "description": "Gerencie suas receitas, despesas em um só lugar. Simples, seguro e eficiente.",
+      "mobile": {
+        "title": "Bem-vindo ao rfin",
+        "description": "Gerencie suas finanças de forma simples"
+      },
+      "features": {
+        "feature1": {
+          "title": "Visão Geral Completa",
+          "description": "Acompanhe todas as suas finanças."
+        },
+        "feature2": {
+          "title": "Categorias Personalizadas",
+          "description": "Organize suas despesas e receitas por categorias."
+        },
+        "feature3": {
+          "title": "Metas Financeiras",
+          "description": "Defina metas e acompanhe seu progresso financeiro."
+        },
+        "feature4": {
+          "title": "Análises",
+          "description": "Visualize seus gastos e ganhos."
+        }
+      }
+    },
+    "signIn": {
+      "title": "Bem-vindo de volta!",
+      "description": "Entre com suas credenciais para acessar sua conta",
+      "inputs": {
+        "email": "Email",
+        "password": "Senha"
+      },
+      "button": {
+        "submit": "Entrar",
+        "loading": "Entrando..."
+      }
+    },
+    "signUp": {
+      "title": "Crie sua conta",
+      "description": "Cadastre-se para começar a gerenciar suas finanças",
+      "inputs": {
+        "name": "Nome",
+        "email": "Email",
+        "password": "Senha",
+        "confirmPassword": "Confirmar Senha"
+      },
+      "password_warning": "Mínimo de 8 caracteres",
+      "button": {
+        "submit": "Cadastrar",
+        "loading": "Cadastrando..."
+      }
+    }
+  }
+}

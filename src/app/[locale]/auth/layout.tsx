@@ -1,9 +1,11 @@
 import Image from 'next/image'
+import { getTranslations } from 'next-intl/server'
 
 import { FeatureCard } from '@/client/modules/auth/components/FeatureCard'
 import { featuresCardItems } from '@/client/modules/auth/constants'
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  const t = await getTranslations()
   return (
     <div className="min-h-screen bg-background flex">
       <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative overflow-hidden">
@@ -21,16 +23,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </div>
 
           <h1 className="text-4xl xl:text-5xl font-bold text-foreground mb-6 leading-tight">
-            {/* <Trans
-              i18nKey="auth.layout.title"
-              components={{
-                br: <br />,
-                span: <span className="text-primary" />
-              }}
-            /> */}
+            {t('auth.layout.title')}
+            <br />
+            <span className="text-primary">{t('auth.layout.titleHighlight')}</span>
           </h1>
 
-          <p className="text-lg text-muted-foreground mb-12 max-w-md">{'auth.layout.description'}</p>
+          <p className="text-lg text-muted-foreground mb-12 max-w-md">{t('auth.layout.description')}</p>
 
           <div className="grid grid-cols-2 gap-6 max-w-lg">
             {featuresCardItems.map((item) => (
@@ -51,13 +49,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <div>
               <Image src="public/icons/logo.svg" alt="rfin" width={10} height={10} className="mx-auto mb-4" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground">{'auth.layout.mobile.title'}</h2>
-            <p className="text-muted-foreground mt-2">{'auth.layout.mobile.description'}</p>
+            <h2 className="text-2xl font-bold text-foreground">{t('auth.layout.mobile.title')}</h2>
+            <p className="text-muted-foreground mt-2">{t('auth.layout.mobile.description')}</p>
           </div>
-
-          <div>{children}</div>
-
-          <p className="text-center text-sm text-muted-foreground mt-6">{'general.copyright'}</p>
+          v<div>{children}</div>
+          <p className="text-center text-sm text-muted-foreground mt-6">{t('general.copyright')}</p>
         </div>
       </div>
     </div>

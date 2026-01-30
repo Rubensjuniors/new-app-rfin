@@ -1,4 +1,3 @@
-import { redirect } from 'next/dist/client/components/navigation'
 import { getServerSession } from 'next-auth/next'
 
 import { authOptions } from '@/server/libs/auth'
@@ -6,13 +5,9 @@ import { authOptions } from '@/server/libs/auth'
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
-  if (!session) {
-    redirect('/login')
-  }
-
   return (
     <main className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Bem-vindo, {session.user?.name || session.user?.email}!</h1>
+      <h1 className="text-2xl font-bold mb-4">Bem-vindo, {session?.user?.name || session?.user?.email}!</h1>
 
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-lg font-semibold mb-2">Seus dados:</h2>

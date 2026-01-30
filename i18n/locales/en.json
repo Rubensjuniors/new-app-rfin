@@ -1,0 +1,61 @@
+{
+  "general": {
+    "copyright": "© 2024 rfin. All rights reserved."
+  },
+  "auth": {
+    "layout": {
+      "title": "Control your finances",
+      "titleHighlight": "in a simple way",
+      "description": "Manage your income and expenses in one place. Simple, secure and efficient.",
+      "mobile": {
+        "title": "Welcome to rfin",
+        "description": "Manage your finances in a simple way"
+      },
+      "features": {
+        "feature1": {
+          "title": "Complete Overview",
+          "description": "Track all your finances."
+        },
+        "feature2": {
+          "title": "Custom Categories",
+          "description": "Organize your expenses and income by categories."
+        },
+        "feature3": {
+          "title": "Financial Goals",
+          "description": "Set goals and track your financial progress."
+        },
+        "feature4": {
+          "title": "Analytics",
+          "description": "Visualize your spending and earnings."
+        }
+      }
+    },
+    "signIn": {
+      "title": "Welcome back!",
+      "description": "Sign in with your credentials to access your account",
+      "inputs": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "button": {
+        "submit": "Sign In",
+        "loading": "Signing in..."
+      }
+    },
+    "signUp": {
+      "title": "Create your account",
+      "description": "Sign up to start managing your finances",
+      "inputs": {
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+      },
+      "password_warning": "Minimum 8 characters",
+      "button": {
+        "submit": "Sign Up",
+        "loading": "Signing up..."
+      }
+    }
+  }
+}

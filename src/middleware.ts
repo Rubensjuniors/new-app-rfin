@@ -1,41 +1,84 @@
-import { type NextRequest, NextResponse } from 'next/server'
-import { getToken } from 'next-auth/jwt'
+import { NextRequest, NextResponse } from 'next/server'
+import createMiddleware from 'next-intl/middleware'
 
-export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request })
-  const isAuth = !!token
-  const isAuthPage =
-    request.nextUrl.pathname.startsWith('/auth/sign-in') ||
-    request.nextUrl.pathname.startsWith('/auth/sign-up')
+import { defaultLocale, locales } from '../i18n/config'
 
-  if (isAuth && isAuthPage) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
-  }
+const intlMiddleware = createMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: 'always'
+})
 
-  if (!isAuth && !isAuthPage) {
-    let from = request.nextUrl.pathname
-    if (request.nextUrl.search) {
-      from += request.nextUrl.search
-    }
-
-    return NextResponse.redirect(
-      new URL(`/auth/sign-in?callbackUrl=${encodeURIComponent(from)}`, request.url)
-    )
-  }
+const localeMapping: Record<string, string> = {
+  pt: 'pt-br'
 }
 
-// Protege TODAS as rotas exceto as públicas
+const browserLocaleMapping: Record<string, string> = {
+  pt: 'pt-br',
+  'pt-br': 'pt-br',
+  pt_br: 'pt-br',
+  'pt-BR': 'pt-br',
+  en: 'en',
+  'en-us': 'en',
+  en_us: 'en',
+  'en-US': 'en'
+}
+
+export default function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+  const pathnameSegments = pathname.split('/').filter(Boolean)
+  const firstSegment = pathnameSegments[0]
+
+  if (locales.includes(firstSegment)) {
+    return intlMiddleware(request)
+  }
+
+  if (localeMapping[firstSegment]) {
+    const newPathname = pathname.replace(`/${firstSegment}`, `/${localeMapping[firstSegment]}`)
+
+    return NextResponse.redirect(new URL(newPathname, request.url))
+  }
+
+  const localePattern = /^\/([a-z]{2}(?:-[a-z]{2})?)$/
+  const match = pathname.match(localePattern)
+
+  if (match && !locales.includes(match[1])) {
+    return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url))
+  }
+
+  if (!locales.includes(firstSegment) && pathnameSegments.length > 1) {
+    const remainingPath = pathnameSegments.slice(1).join('/')
+
+    return NextResponse.redirect(new URL(`/${defaultLocale}/${remainingPath}`, request.url))
+  }
+
+  if (!pathname || pathname === '/') {
+    const acceptLanguage = request.headers.get('accept-language')
+    let determinedLocale = defaultLocale
+
+    if (acceptLanguage) {
+      const browserLocale = acceptLanguage.split(',')[0].trim().toLowerCase()
+
+      if (browserLocaleMapping[browserLocale]) {
+        determinedLocale = browserLocaleMapping[browserLocale]
+      } else {
+        const localeKey = Object.keys(browserLocaleMapping).find((key) => browserLocale.startsWith(key))
+        if (localeKey) {
+          determinedLocale = browserLocaleMapping[localeKey]
+        }
+      }
+    }
+
+    return NextResponse.redirect(new URL(`/${determinedLocale}${pathname}`, request.url))
+  }
+
+  const savedLocale = request.cookies.get('NEXT_LOCALE')
+  const fallbackLocale =
+    savedLocale && locales.includes(savedLocale.value) ? savedLocale.value : defaultLocale
+
+  return NextResponse.redirect(new URL(`/${fallbackLocale}${pathname}`, request.url))
+}
+
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * - auth (auth pages)
-     * - api (all API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    '/((?!auth|api|_next/static|_next/image|favicon.ico|public).*)'
-  ]
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 }
