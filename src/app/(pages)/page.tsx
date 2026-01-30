@@ -1,10 +1,23 @@
-import { Button } from '@/client/shared/components/ui/button'
+import { redirect } from 'next/dist/client/components/navigation'
+import { getServerSession } from 'next-auth/next'
 
-export default function Home() {
+import { authOptions } from '@/server/libs/auth'
+
+export default async function Home() {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    redirect('/login')
+  }
+
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <Button>Click me</Button>
-    </div>
+    <main className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Bem-vindo, {session.user?.name || session.user?.email}!</h1>
+
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-lg font-semibold mb-2">Seus dados:</h2>
+        <pre className="bg-gray-100 p-4 rounded">{JSON.stringify(session, null, 2)}</pre>
+      </div>
+    </main>
   )
 }
