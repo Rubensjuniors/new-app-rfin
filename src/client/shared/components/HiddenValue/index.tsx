@@ -1,6 +1,6 @@
 import { cn } from '@/client/lib/utils'
 
-import { useHiddenMoneyToggle } from '../../../../../../app-rfin/src/shared/contexts/HiddenMoneyToggleContext'
+import { useHiddenMoneyToggle } from '../../contexts/HiddenMoneyToggleContext'
 import { formatCurrency } from '../../utils/currency'
 
 export function HiddenMoney({ value, classNames }: { value: number; classNames?: string }) {
