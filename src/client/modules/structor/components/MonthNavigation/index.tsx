@@ -33,7 +33,7 @@ export function MonthNavigation() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[280px] p-3" align="center">
+      <PopoverContent className="w-70 p-3" align="center">
         <div className="flex items-center justify-between mb-3 pb-2 border-b">
           <Button
             variant="ghost"
