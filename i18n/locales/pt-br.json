@@ -1,8 +1,18 @@
 {
+  "sidebar": {
+    "financial": "Financeiro"
+  },
   "general": {
     "copyright": "© 2024 rfin. Todos os direitos reservados.",
+    "edit": "Editar",
+    "delete": "Excluir",
     "signIn": "Entrar",
-    "signUp": "Criar Conta"
+    "signUp": "Cadastrar"
+  },
+  "summary": {
+    "income": "Entradas",
+    "expense": "Saídas",
+    "total": "Total"
   },
   "auth": {
     "layout": {
@@ -59,5 +69,39 @@
         "loading": "Cadastrando..."
       }
     }
+  },
+  "quick_filters": {
+    "all": "Todas",
+    "income": "Entradas",
+    "expense": "Saídas",
+    "fixed": "Fixas",
+    "installments": "Parceladas"
+  },
+  "transactions": {
+    "add_transaction": "Adicionar Transação",
+    "add_transaction_sidebar": {
+      "title": "Adicionar Nova Transação",
+      "description": "Adicione uma nova transação de receita ou despesa"
+    },
+    "tags": {
+      "fixed": "Fixo"
+    },
+    "list": {
+      "title": "Transações"
+    }
+  },
+  "months": {
+    "january": "Janeiro",
+    "february": "Fevereiro",
+    "march": "Março",
+    "april": "Abril",
+    "may": "Maio",
+    "june": "Junho",
+    "july": "Julho",
+    "august": "Agosto",
+    "september": "Setembro",
+    "october": "Outubro",
+    "november": "Novembro",
+    "december": "Dezembro"
   }
 }
