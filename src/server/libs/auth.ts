@@ -1,6 +1,7 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import bcrypt from 'bcryptjs'
 import { NextAuthOptions } from 'next-auth'
+import { Adapter } from 'next-auth/adapters'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
@@ -8,7 +9,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import prisma from './prisma'
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as Adapter,
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt'
@@ -53,24 +54,37 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name
+          name: user.name,
+          emailVerified: user.emailVerified,
+          image: user.image,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
         }
       }
     })
   ],
-  session: {
-    strategy: 'jwt'
-  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.email = user.email
+        token.name = user.name
+        token.emailVerified = user.emailVerified
+        token.image = user.image
+        token.createdAt = user.createdAt
+        token.updatedAt = user.updatedAt
       }
       return token
     },
     async session({ session, token }) {
       if (session?.user) {
         session.user.id = token.id as string
+        session.user.email = token.email as string
+        session.user.name = token.name
+        session.user.emailVerified = token.emailVerified
+        session.user.image = token.image
+        session.user.createdAt = token.createdAt as Date
+        session.user.updatedAt = token.updatedAt as Date
       }
       return session
     },
