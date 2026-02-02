@@ -1,3 +1,4 @@
+'use client'
 import { HiddenMoneyButton } from '@/client/shared/components/HiddenValue/HiddenMoneyButton'
 
 import { MonthNavigation } from '../MonthNavigation'
