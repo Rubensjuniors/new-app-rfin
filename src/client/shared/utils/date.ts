@@ -1,4 +1,4 @@
-import type { MonthYear } from '@/modules/structor/context/MonthNavigationContext'
+import { MonthYear } from '@/client/modules/structor/context/MonthNavigationContext'
 
 export const formatDate = (dateStr: string, locale = 'pt-BR') => {
   return new Intl.DateTimeFormat(locale, {

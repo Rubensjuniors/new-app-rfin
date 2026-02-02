@@ -2,7 +2,6 @@ import '../../client/shared/assets/styles/globals.css'
 
 import type { Metadata } from 'next'
 import { DM_Sans } from 'next/font/google'
-import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { ReactNode } from 'react'
 
@@ -48,10 +47,10 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
         />
         <link rel="icon" href="/static/app-perfect-match/images/hotmart-logo-icon.svg" type="image/svg+xml" />
       </head>
-      <body className={dmSans.variable}>
-        <NextIntlClientProvider messages={messages}>
-          <Providers>{children}</Providers>
-        </NextIntlClientProvider>
+      <body className={dmSans.variable} suppressHydrationWarning>
+        <Providers messages={messages} locale={locale}>
+          {children}
+        </Providers>
       </body>
     </html>
   )
