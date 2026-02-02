@@ -4,6 +4,8 @@ import { SessionProvider } from 'next-auth/react'
 import { NextIntlClientProvider } from 'next-intl'
 import { ThemeProvider } from 'next-themes'
 
+import { HiddenMoneyToggleProvider } from '../shared/contexts/HiddenMoneyToggleContext'
+
 type Props = {
   children?: React.ReactNode
   messages: Record<string, string | Record<string, unknown>>
@@ -21,7 +23,9 @@ export const Providers = ({ children, messages, locale }: Props) => {
           storageKey="rfin-ui-theme"
           disableTransitionOnChange
         >
-          {children}
+          <HiddenMoneyToggleProvider>
+            {children}
+          </HiddenMoneyToggleProvider>
         </ThemeProvider>
       </NextIntlClientProvider>
     </SessionProvider>

@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 import type { HiddenMoneyToggleContextType, HiddenMoneyToggleProviderProps } from './types'
 
@@ -8,14 +8,19 @@ const HiddenMoneyToggleContext = createContext<HiddenMoneyToggleContextType>(
 )
 
 export function HiddenMoneyToggleProvider({ children }: HiddenMoneyToggleProviderProps) {
-  const [isVisible, setIsVisible] = useState<boolean>(() => {
+  const [isVisible, setIsVisible] = useState<boolean>(true)
+
+  useEffect(() => {
     const storedValue = localStorage.getItem('hiddenMoney')
-    return storedValue ? JSON.parse(storedValue) : true
-  })
+    if (storedValue) {
+      setIsVisible(JSON.parse(storedValue))
+    }
+  }, [])
 
   function toggleVisibility() {
-    localStorage.setItem('hiddenMoney', JSON.stringify(!isVisible))
-    setIsVisible((prev) => !prev)
+    const newValue = !isVisible
+    localStorage.setItem('hiddenMoney', JSON.stringify(newValue))
+    setIsVisible(newValue)
   }
 
   return (
@@ -27,8 +32,8 @@ export function HiddenMoneyToggleProvider({ children }: HiddenMoneyToggleProvide
 
 export function useHiddenMoneyToggle() {
   const context = useContext(HiddenMoneyToggleContext)
-  if (context === undefined) {
-    throw new Error('useUserContext must be used within an AuthProvider')
+  if (!context || context === undefined) {
+    throw new Error('useHiddenMoneyToggle must be used within HiddenMoneyToggleProvider')
   }
   return context
 }
