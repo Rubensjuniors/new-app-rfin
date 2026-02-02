@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { makeRegisterUserService } from '@/server/factories/makeRegisterUserService'
 import { createUserSchema } from '@/server/shared/dtos/userSchema'
-import { applySecurityHeaders } from '@/server/shared/middleware'
+import { applySecurityHeaders, rateLimitByIp } from '@/server/shared/middleware'
 
 export async function RegisterController(request: NextRequest) {
+  // Rate limiting
+  const rateLimitResponse = await rateLimitByIp(request, 'register')
+  if (rateLimitResponse) {
+    return applySecurityHeaders(rateLimitResponse)
+  }
+
   try {
     const body = await request.json()
     const { name, email, password } = createUserSchema.parse(body)

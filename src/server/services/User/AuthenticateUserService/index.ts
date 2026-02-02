@@ -1,6 +1,7 @@
 import { compare } from 'bcryptjs'
 
 import { IUsersRepository } from '@/server/repositories/PrismaUsersRepository/types'
+import { rateLimitByEmail } from '@/server/shared/middleware'
 
 import { AuthenticateUserServiceRequest, AuthenticateUserServiceResponse } from './types'
 
@@ -13,6 +14,11 @@ export class AuthenticateUserService {
   }: AuthenticateUserServiceRequest): Promise<AuthenticateUserServiceResponse | null> {
     if (!password) {
       return null
+    }
+
+    const allowed = await rateLimitByEmail(email)
+    if (!allowed) {
+      throw new Error('Muitas tentativas de login. Tente novamente em 15 minutos.')
     }
 
     const user = await this.usersRepository.findByEmail(email)
