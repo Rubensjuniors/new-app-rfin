@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { makeRegisterUserService } from '@/server/factories/makeRegisterUserService'
 import { createUserSchema } from '@/server/shared/dtos/userSchema'
+import { applySecurityHeaders } from '@/server/shared/middleware'
 
 export async function RegisterController(request: NextRequest) {
   try {
@@ -11,7 +12,7 @@ export async function RegisterController(request: NextRequest) {
     const registerUserService = makeRegisterUserService()
     const user = await registerUserService.execute({ name, email, password })
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         user: {
           id: user.id,
@@ -21,10 +22,15 @@ export async function RegisterController(request: NextRequest) {
       },
       { status: 201 }
     )
+
+    return applySecurityHeaders(response)
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 400 })
+      const errorResponse = NextResponse.json({ error: error.message }, { status: 400 })
+      return applySecurityHeaders(errorResponse)
     }
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+
+    const serverErrorResponse = NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return applySecurityHeaders(serverErrorResponse)
   }
 }
