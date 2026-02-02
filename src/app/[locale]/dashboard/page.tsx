@@ -2,8 +2,6 @@ import { getServerSession } from 'next-auth/next'
 
 import { authOptions } from '@/server/libs/auth'
 
-import { DashboardClient } from './dashboard-client'
-
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
@@ -15,8 +13,6 @@ export default async function Home() {
         <h2 className="text-lg font-semibold mb-2">Seus dados:</h2>
         <pre className="bg-gray-10 p-4 rounded">{JSON.stringify(session, null, 2)}</pre>
       </div>
-
-      <DashboardClient />
     </main>
   )
 }

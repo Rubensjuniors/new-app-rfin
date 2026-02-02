@@ -1,11 +1,10 @@
 'use client'
-import { Popover, PopoverContent } from '@radix-ui/react-popover'
 import { Calendar, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 import { cn } from '@/client/lib/utils'
 import { Button } from '@/client/shared/components/ui/Button'
-import { PopoverTrigger } from '@/client/shared/components/ui/Popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/client/shared/components/ui/Popover'
 import { formatMonth, months } from '@/client/shared/utils/date'
 
 import { useMonthNavigation } from '../../context/MonthNavigationContext'

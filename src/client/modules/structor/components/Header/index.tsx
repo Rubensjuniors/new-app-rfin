@@ -1,6 +1,7 @@
 import { HiddenMoneyButton } from '@/client/shared/components/HiddenValue/HiddenMoneyButton'
 
 import { MonthNavigation } from '../MonthNavigation'
+import { Profile } from '../Profile'
 import { SidebarTrigger } from '../Sidebar/SidebarTrigger'
 
 export function Header() {
@@ -10,6 +11,7 @@ export function Header() {
       <div className="flex items-center justify-end w-full max-w-6xl gap-2">
         <MonthNavigation />
         <HiddenMoneyButton />
+        <Profile />
       </div>
     </header>
   )
