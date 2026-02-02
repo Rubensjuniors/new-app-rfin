@@ -1,259 +1,148 @@
-# 🗂️ Guia de Organização - API Next.js
+# RFin - Controle Financeiro Pessoal
 
-Estrutura de pastas para migração da API Fastify para Next.js App Router, mantendo a arquitetura limpa em camadas.
+Aplicação de controle financeiro pessoal desenvolvida com Next.js, Prisma e Clean Architecture.
 
----
+## 🏗️ Arquitetura Backend
 
-## 📂 Estrutura Completa
+O backend segue os princípios **SOLID** e **Clean Architecture**, garantindo código desacoplado, testável e fácil de manter.
 
-```
-📂 src/
-│
-├── 📝 @types/                                    Tipos TypeScript customizados
-│   └── next-auth.d.ts
-│
-├── 🏠 app/                                       Next.js App Router
-│   │
-│   ├── api/                                      🛣️ ROTAS DA API (Route Handlers)
-│   │   ├── auth/
-│   │   │   ├── login/route.ts                   POST /api/auth/login
-│   │   │   ├── logout/route.ts                  POST /api/auth/logout
-│   │   │   ├── refresh/route.ts                 POST /api/auth/refresh
-│   │   │   └── verify/route.ts                  GET /api/auth/verify
-│   │   │
-│   │   ├── users/
-│   │   │   ├── route.ts                         GET/POST /api/users
-│   │   │   ├── profile/route.ts                 GET /api/users/profile
-│   │   │   └── [id]/route.ts                    GET/PUT/DELETE /api/users/:id
-│   │   │
-│   │   ├── categories/
-│   │   │   ├── route.ts                         GET/POST /api/categories
-│   │   │   └── [id]/route.ts                    GET/PUT/DELETE /api/categories/:id
-│   │   │
-│   │   ├── payment-cards/
-│   │   │   ├── route.ts
-│   │   │   └── [id]/route.ts
-│   │   │
-│   │   └── transactions/
-│   │       ├── route.ts
-│   │       └── [id]/route.ts
-│   │
-│   ├── layout.tsx
-│   └── page.tsx
-│
-├── 💼 services/                                  CAMADA DE NEGÓCIO (regras de negócio)
-│   ├── auth/
-│   │   ├── authenticate-service/
-│   │   │   ├── index.ts
-│   │   │   ├── types.ts
-│   │   │   └── authenticate-service.spec.ts
-│   │   ├── refresh-token-service/
-│   │   └── verify-token-service/
-│   │
-│   ├── users/
-│   │   ├── create-user-service/
-│   │   ├── get-user-profile-service/
-│   │   └── update-user-service/
-│   │
-│   ├── categories/
-│   │   ├── create-category-service/
-│   │   ├── list-categories-service/
-│   │   └── delete-category-service/
-│   │
-│   ├── payment-cards/
-│   │   ├── create-payment-card-service/
-│   │   └── list-payment-cards-service/
-│   │
-│   └── transactions/
-│       ├── create-transaction-service/
-│       └── list-transactions-service/
-│
-├── 💾 repositories/                              CAMADA DE DADOS (comunicação com DB)
-│   ├── prisma-users-repository/
-│   │   ├── index.ts
-│   │   └── types.ts
-│   ├── prisma-categories-repository/
-│   │   ├── index.ts
-│   │   └── types.ts
-│   ├── prisma-payment-cards-repository/
-│   │   ├── index.ts
-│   │   └── types.ts
-│   └── prisma-transactions-repository/
-│       ├── index.ts
-│       └── types.ts
-│
-├── 🏭 factories/                                 INJEÇÃO DE DEPENDÊNCIAS
-│   ├── auth/
-│   │   ├── make-authenticate-service.ts
-│   │   ├── make-refresh-token-service.ts
-│   │   └── make-verify-token-service.ts
-│   ├── users/
-│   │   ├── make-create-user-service.ts
-│   │   ├── make-get-user-profile-service.ts
-│   │   └── make-update-user-service.ts
-│   ├── categories/
-│   │   └── make-create-category-service.ts
-│   ├── payment-cards/
-│   │   └── make-create-payment-card-service.ts
-│   └── transactions/
-│       └── make-create-transaction-service.ts
-│
-├── 🔧 shared/                                    CÓDIGO COMPARTILHADO
-│   ├── schemas/                                  Validação de dados (Zod)
-│   │   ├── user-schema/
-│   │   │   └── index.ts
-│   │   ├── category-schema/
-│   │   │   └── index.ts
-│   │   ├── payment-card-schema/
-│   │   │   └── index.ts
-│   │   └── transaction-schema/
-│   │       └── index.ts
-│   │
-│   ├── errors/                                   Tratamento de erros
-│   │   ├── app-error.ts
-│   │   ├── error-handler.ts
-│   │   └── error-messages.ts
-│   │
-│   ├── middleware/                               Middlewares reutilizáveis
-│   │   ├── with-auth.ts
-│   │   ├── with-error-handler.ts
-│   │   └── with-validation.ts
-│   │
-│   ├── utils/                                    Utilitários
-│   │   ├── http-response.ts
-│   │   ├── jwt.ts
-│   │   └── cookies.ts
-│   │
-│   ├── assets/
-│   │   └── styles/
-│   │       └── globals.css
-│   │
-│   └── components/
-│       └── ui/
-│           └── button.tsx
-│
-├── 🌍 config/                                    CONFIGURAÇÕES
-│   └── env.ts                                   Validação de variáveis de ambiente
-│
-├── 📚 lib/                                       BIBLIOTECAS EXTERNAS
-│   ├── prisma.ts
-│   └── utils.ts
-│
-└── 🎭 __mocks__/                                 MOCKS PARA TESTES
-    └── in-memory/
-        ├── in-memory-users-repository.ts
-        └── in-memory-categories-repository.ts
-```
-
----
-
-## 🔄 Fluxo de Dados (Camadas)
+### 📁 Estrutura de Pastas
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Route Handler                            │
-│              (src/app/api/*/route.ts)                        │
-│         Recebe HTTP → Valida → Delega → Responde            │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│                       Factory                                │
-│              (src/factories/*/*.ts)                          │
-│              Cria instâncias com DI                          │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│                       Service                                │
-│              (src/services/*/*.ts)                           │
-│              Regras de negócio da aplicação                  │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     Repository                               │
-│              (src/repositories/*/*.ts)                       │
-│              Acesso ao banco de dados (Prisma)               │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Database                                │
-│                    PostgreSQL                                │
-└─────────────────────────────────────────────────────────────┘
+src/server/
+├── domain/                    # 🎯 Regras de negócio (independente de tudo)
+│   ├── entities/             # Entidades do domínio
+│   │   ├── User.ts
+│   │   ├── Transaction.ts
+│   │   └── PaymentCard.ts
+│   ├── repositories/         # INTERFACES dos repositórios
+│   │   ├── IUserRepository.ts
+│   │   ├── ITransactionRepository.ts
+│   │   └── IPaymentCardRepository.ts
+│   └── errors/               # Erros customizados
+│       └── DomainErrors.ts
+│
+├── application/              # 🔄 Casos de uso (orquestra o domínio)
+│   ├── use-cases/
+│   │   ├── user/
+│   │   │   ├── CreateUser.ts
+│   │   │   ├── AuthenticateUser.ts
+│   │   │   └── GetUserById.ts
+│   │   ├── transaction/
+│   │   │   ├── CreateTransaction.ts
+│   │   │   └── ListTransactions.ts
+│   └── dtos/                 # Data Transfer Objects
+│       ├── UserDTO.ts
+│       └── TransactionDTO.ts
+│
+├── infrastructure/           # 🔌 Implementações concretas
+│   ├── database/
+│   │   ├── prisma/          # Implementação Prisma
+│   │   │   ├── repositories/
+│   │   │   │   ├── PrismaUserRepository.ts
+│   │   │   │   └── PrismaTransactionRepository.ts
+│   │   │   └── client.ts
+│   │   └── mongodb/         # Futuro: implementação MongoDB
+│   │       └── repositories/
+│   └── external/             # Serviços externos
+│       ├── email/
+│       └── storage/
+│
+└── presentation/             # 🌐 Camada de apresentação (API)
+    ├── http/
+    │   ├── controllers/
+    │   │   ├── UserController.ts
+    │   │   └── TransactionController.ts
+    │   └── middlewares/
+    └── factories/            # Dependency Injection
+        └── makeCreateUserUseCase.ts
 ```
 
----
+### 🎯 Camadas da Arquitetura
 
-## 📋 Mapeamento Fastify → Next.js
+#### 1. **Domain (Domínio)**
 
-| **Fastify**                  | **Next.js**                          |
-| ---------------------------- | ------------------------------------ |
-| `src/app/controllers/`       | `src/app/api/*/route.ts`             |
-| `src/app/services/`          | `src/services/`                      |
-| `src/app/repositories/`      | `src/repositories/`                  |
-| `src/app/factories/`         | `src/factories/`                     |
-| `src/app/routes/`            | `src/app/api/` (estrutura de pastas) |
-| `src/app/shared/dtos/`       | `src/shared/schemas/`                |
-| `src/app/shared/errors/`     | `src/shared/errors/`                 |
-| `src/app/shared/middleware/` | `src/shared/middleware/`             |
-| `src/app/shared/utils/`      | `src/shared/utils/`                  |
-| `src/env/`                   | `src/config/env.ts`                  |
-| `src/libs/`                  | `src/lib/`                           |
+- **Responsabilidade:** Regras de negócio puras
+- **Dependências:** Nenhuma! Completamente isolada
+- **Contém:**
+  - `entities/` - Classes que representam conceitos do negócio
+  - `repositories/` - Interfaces (contratos) dos repositórios
+  - `errors/` - Erros de domínio customizados
 
----
+#### 2. **Application (Aplicação)**
 
-## ✅ Convenções de Nomenclatura
+- **Responsabilidade:** Casos de uso e orquestração
+- **Dependências:** Apenas do Domain
+- **Contém:**
+  - `use-cases/` - Regras de aplicação (criar usuário, autenticar, etc)
+  - `dtos/` - Objetos para transferir dados entre camadas
 
-- **Pastas:** `kebab-case` → `create-user-service/`
-- **Route Handlers:** `route.ts` (obrigatório no Next.js)
-- **Parâmetros dinâmicos:** `[id]/route.ts` → `/api/users/:id`
-- **Classes:** `PascalCase` → `CreateUserService`
-- **Funções:** `camelCase` → `makeCreateUserService()`
+#### 3. **Infrastructure (Infraestrutura)**
 
----
+- **Responsabilidade:** Implementações concretas
+- **Dependências:** Domain e Application
+- **Contém:**
+  - `database/prisma/` - Implementação com Prisma
+  - `database/mongodb/` - (Futuro) Implementação com MongoDB
+  - `external/` - Integrações externas (email, storage, etc)
 
-## 🎯 Responsabilidade de Cada Camada
+#### 4. **Presentation (Apresentação)**
 
-### `src/app/api/` - Route Handlers
+- **Responsabilidade:** Interface com o mundo externo (APIs)
+- **Dependências:** Todas as camadas
+- **Contém:**
+  - `controllers/` - Controladores HTTP
+  - `middlewares/` - Middlewares de autenticação, validação, etc
+  - `factories/` - Injeção de dependências
 
-- Receber requisições HTTP
-- Validar entrada (schemas)
-- Chamar factories/services
-- Retornar respostas HTTP
-- **NÃO contém regras de negócio**
+### ✨ Benefícios
 
-### `src/services/` - Lógica de Negócio
+✅ **Fácil de Trocar Banco de Dados**
 
-- Regras de negócio da aplicação
-- Validações de domínio
-- Orquestração entre repositories
-- **Independente de framework**
+- Basta criar nova implementação em `infrastructure/database/`
+- O domínio e casos de uso não mudam
 
-### `src/repositories/` - Acesso a Dados
+✅ **Testável**
 
-- CRUD com Prisma
-- Queries específicas
-- **Única camada que conhece o Prisma**
+- Casos de uso testáveis sem banco de dados
+- Mocks fáceis através das interfaces
 
-### `src/factories/` - Injeção de Dependências
+✅ **Manutenível**
 
-- Instanciar repositories
-- Instanciar services
-- Configurar dependências
+- Cada camada com responsabilidade clara
+- Alterações isoladas
 
-### `src/shared/schemas/` - Validação
+✅ **Desacoplado**
 
-- Schemas Zod
-- Validação de entrada/saída
+- Domínio não conhece Prisma, Next.js ou qualquer framework
 
-### `src/shared/middleware/` - Middlewares
+### 🔄 Fluxo de Dados
 
-- Autenticação (`withAuth`)
-- Tratamento de erros (`withErrorHandler`)
-- Validação genérica
+```
+API Route → Controller → Use Case → Repository Interface → Prisma Repository → Database
+                            ↓
+                          Entity
+```
 
----
+### 📝 Exemplo de Uso
 
-**Mantenha a separação de responsabilidades e a aplicação ficará escalável e testável!** 🚀
+```typescript
+// 1. Factory cria o use case com dependências
+export function makeCreateUserUseCase() {
+  const userRepository = new PrismaUserRepository()
+  return new CreateUserUseCase(userRepository)
+}
+
+// 2. Controller usa o use case
+export async function POST(request: Request) {
+  const createUser = makeCreateUserUseCase()
+  const user = await createUser.execute(data)
+  return Response.json(user)
+}
+
+// 3. Para trocar de banco: apenas muda a factory
+export function makeCreateUserUseCase() {
+  const userRepository = new MongoUserRepository() // ← Mudança aqui
+  return new CreateUserUseCase(userRepository) // Use case inalterado!
+}
+```

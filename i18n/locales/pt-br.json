@@ -61,7 +61,22 @@
         "name": "Nome",
         "email": "Email",
         "password": "Senha",
-        "confirmPassword": "Confirmar Senha"
+        "confirmPassword": "Confirmar Senha",
+        "error": {
+          "name": {
+            "error": "Nome deve ter no mínimo 2 caracteres"
+          },
+          "email": {
+            "error": "Email inválido"
+          },
+          "password": {
+            "error": "Senha deve ter no mínimo 8 caracteres"
+          },
+          "confirmPassword": {
+            "error": "Confirmação de senha deve ter no mínimo 8 caracteres",
+            "mismatch": "As senhas não coincidem"
+          }
+        }
       },
       "password_warning": "Mínimo de 8 caracteres",
       "button": {

@@ -1,39 +1,56 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 
 import SignInForm from '@/client/modules/auth/components/SignInForm'
 import SignUpForm from '@/client/modules/auth/components/SignUpForm'
+import { AuthTabs } from '@/client/modules/auth/constants'
 import { Button } from '@/client/shared/components/ui/Button'
 import { Card } from '@/client/shared/components/ui/Card'
 import { Tabs } from '@/client/shared/components/ui/Tabs'
+
+const PARAM_kEY_TAB = 'tab'
 
 // TODO:  Cadastrar copy
 export default function SignInPage() {
   const t = useTranslations()
   const params = useParams()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const locale = (params.locale as string) || 'en'
+
+  const currentTab = searchParams.get(PARAM_kEY_TAB) || AuthTabs.SIGN_IN
 
   const handleOAuthSignIn = (provider: string) => {
     signIn(provider, { callbackUrl: `/${locale}/dashboard` })
   }
 
+  const handleTabChange = (value: string) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set(PARAM_kEY_TAB, value)
+    router.push(url.pathname + url.search)
+  }
+
   return (
     <div>
       <Card className="border-border/50 shadow-xl bg-card/80 backdrop-blur-sm px-4 gap-0">
-        <Tabs defaultValue="sign-in" className="w-full flex items-center flex-col">
+        <Tabs
+          value={currentTab}
+          onValueChange={handleTabChange}
+          className="w-full flex items-center flex-col"
+        >
           <Tabs.List className="w-full mb-4">
-            <Tabs.Trigger value="sign-in">{t('general.signIn')}</Tabs.Trigger>
-            <Tabs.Trigger value="sign-up">{t('general.signUp')}</Tabs.Trigger>
+            <Tabs.Trigger value={AuthTabs.SIGN_IN}>{t('general.signIn')}</Tabs.Trigger>
+            <Tabs.Trigger value={AuthTabs.SIGN_UP}>{t('general.signUp')}</Tabs.Trigger>
           </Tabs.List>
 
-          <Tabs.Content value="sign-in" className="w-full">
+          <Tabs.Content value={AuthTabs.SIGN_IN} className="w-full">
             <SignInForm />
           </Tabs.Content>
 
-          <Tabs.Content value="sign-up" className="w-full">
+          <Tabs.Content value={AuthTabs.SIGN_UP} className="w-full">
             <SignUpForm />
           </Tabs.Content>
         </Tabs>

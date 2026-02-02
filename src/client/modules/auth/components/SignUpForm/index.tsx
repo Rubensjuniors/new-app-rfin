@@ -1,32 +1,68 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Label } from '@radix-ui/react-label'
-import { ArrowRight, Eye, EyeOff, Lock, Mail, User } from 'lucide-react'
+import { Lock, Mail, User } from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
-import { Button } from '@/client/shared/components/ui/Button'
-import { CardDescription } from '@/client/shared/components/ui/Card/CardDescription'
-import { CardTitle } from '@/client/shared/components/ui/Card/CardTitle'
 import { Input } from '@/client/shared/components/ui/Form'
+
+import { AuthTabs } from '../../constants'
+import { useHiddenPassword } from '../../context/HiddenPasswordContext'
+import { HiddenPassword } from '../HiddenPassword'
+import { SignUpFormHeader } from './header'
+import { schemaSignUp, TypeSchemaSignUp } from './schema'
+import { SubmitButton } from './submitButton'
 
 export default function SignUpForm() {
   const t = useTranslations()
-  const [showPassword, setShowPassword] = useState(false)
-  const isLoading = false
+  const { showPassword } = useHiddenPassword()
+  const router = useRouter()
+  const params = useParams()
+  const locale = (params.locale as string) || 'en'
 
-  const handleSignUp = async(e: React.FormEvent) => {
-    e.preventDefault()
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, isValid, errors },
+    reset
+  } = useForm<TypeSchemaSignUp>({
+    resolver: zodResolver(schemaSignUp),
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
+  })
+
+  async function handleSignUp(data: TypeSchemaSignUp) {
+    const { name, email, password } = data
+    try {
+      await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, password })
+      })
+
+      router.push(`/${locale}/auth/login?tab=${AuthTabs.SIGN_IN}&email=${email}`)
+      reset()
+    } catch (error: unknown) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    }
   }
 
   return (
     <div>
-      <div className="mb-6">
-        <CardTitle className="text-2xl">{t('auth.signUp.title')}</CardTitle>
-        <CardDescription className="mt-2">{t('auth.signUp.description')}</CardDescription>
-      </div>
+      <SignUpFormHeader />
 
-      <form onSubmit={handleSignUp} className="space-y-4">
+      <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="name">{t('auth.signUp.inputs.name')}</Label>
           <div className="relative">
@@ -36,9 +72,10 @@ export default function SignUpForm() {
               type="text"
               placeholder={t('auth.signUp.inputs.name')}
               className="pl-10 h-11"
-              required
+              {...register('name')}
             />
           </div>
+          {errors.name && <p className="text-xs text-destructive">{t(errors.name.message!)}</p>}
         </div>
 
         <div className="space-y-2">
@@ -50,9 +87,10 @@ export default function SignUpForm() {
               type="email"
               placeholder="seu@email.com"
               className="pl-10 h-11"
-              required
+              {...register('email')}
             />
           </div>
+          {errors.email && <p className="text-xs text-destructive">{t(errors.email.message!)}</p>}
         </div>
 
         <div className="space-y-2">
@@ -64,16 +102,11 @@ export default function SignUpForm() {
               type={showPassword ? 'text' : 'password'}
               placeholder="••••••••"
               className="pl-10 pr-10 h-11"
-              required
+              {...register('password')}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
+            <HiddenPassword />
           </div>
+          {errors.password && <p className="text-xs text-destructive">{t(errors.password.message!)}</p>}
           <p className="text-xs text-muted-foreground">{t('auth.signUp.password_warning')}</p>
         </div>
 
@@ -86,33 +119,17 @@ export default function SignUpForm() {
               type={showPassword ? 'text' : 'password'}
               placeholder="••••••••"
               className="pl-10 pr-10 h-11"
-              required
+              {...register('confirmPassword')}
             />
 
-            {/* TODO: Virar um componete reultilizavel */}
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
+            <HiddenPassword />
           </div>
+          {errors.confirmPassword && (
+            <p className="text-xs text-destructive">{t(errors.confirmPassword.message!)}</p>
+          )}
         </div>
 
-        <Button type="submit" className="w-full h-11 mt-6" disabled={isLoading}>
-          {isLoading ? (
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-              {t('auth.signUp.button.loading')}
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              {t('auth.signUp.button.submit')}
-              <ArrowRight className="h-4 w-4" />
-            </div>
-          )}
-        </Button>
+        <SubmitButton isSubmitting={isSubmitting} isValid={isValid} />
       </form>
     </div>
   )

@@ -1,11 +1,11 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import bcrypt from 'bcryptjs'
 import { NextAuthOptions } from 'next-auth'
 import { Adapter } from 'next-auth/adapters'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GitHubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 
+import { makeAuthenticateUserService } from '../factories/makeAuthenticateUserService'
 import prisma from './prisma'
 
 export const authOptions: NextAuthOptions = {
@@ -37,29 +37,12 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
+        const authenticateUserService = makeAuthenticateUserService()
+
+        return await authenticateUserService.execute({
+          email: credentials.email,
+          password: credentials.password
         })
-
-        if (!user || !user.password) {
-          return null
-        }
-
-        const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
-
-        if (!isPasswordValid) {
-          return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          emailVerified: user.emailVerified,
-          image: user.image,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt
-        }
       }
     })
   ],
@@ -122,6 +105,6 @@ export const authOptions: NextAuthOptions = {
     }
   },
   pages: {
-    signIn: '/auth/sign-in'
+    signIn: '/auth/login'
   }
 }

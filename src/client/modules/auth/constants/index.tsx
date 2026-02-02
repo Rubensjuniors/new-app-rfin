@@ -22,3 +22,8 @@ export const featuresCardItems = [
     description: 'auth.layout.features.feature3.description'
   }
 ]
+
+export enum AuthTabs {
+  SIGN_IN = 'sign-in',
+  SIGN_UP = 'sign-up'
+}

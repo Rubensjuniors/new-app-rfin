@@ -13,4 +13,4 @@ export const browserLocaleMapping: Record<string, string> = {
   'en-US': 'en'
 }
 
-export const publicRoutes = ['/auth/sign-in', '/auth/sign-up']
+export const publicRoutes = ['/auth/login']

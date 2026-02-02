@@ -10,7 +10,7 @@ export function DashboardClient() {
   const locale = (params.locale as string) || 'en'
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: `/${locale}/auth/sign-in` })
+    signOut({ callbackUrl: `/${locale}/auth/login` })
   }
 
   return (

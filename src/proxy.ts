@@ -59,9 +59,9 @@ export default async function proxy(request: NextRequest) {
 
   const isPublic = isPublicRoute(pathname)
 
-  // Redirect to sign-in if not authenticated and trying to access protected route
+  // Redirect to login if not authenticated and trying to access protected route
   if (!token && !isPublic) {
-    return NextResponse.redirect(new URL(`/${firstSegment}/auth/sign-in`, request.url))
+    return NextResponse.redirect(new URL(`/${firstSegment}/auth/login`, request.url))
   }
 
   // Redirect to dashboard if authenticated and trying to access auth pages
@@ -71,7 +71,7 @@ export default async function proxy(request: NextRequest) {
 
   // Redirect locale-only paths to dashboard
   if (pathnameSegments.length === 1) {
-    const destination = token ? `/${firstSegment}/dashboard` : `/${firstSegment}/auth/sign-in`
+    const destination = token ? `/${firstSegment}/dashboard` : `/${firstSegment}/auth/login`
     return NextResponse.redirect(new URL(destination, request.url))
   }
 

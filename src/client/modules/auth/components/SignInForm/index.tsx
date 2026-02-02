@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Label } from '@radix-ui/react-label'
 import { ArrowRight, Eye, EyeOff, Lock, Mail } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
@@ -22,6 +22,8 @@ export default function SignInForm() {
   const params = useParams()
   const [showPassword, setShowPassword] = useState(false)
   const locale = (params.locale as string) || 'en'
+  const searchParams = useSearchParams()
+  const emailFromQuery = searchParams.get('email') || ''
 
   const {
     register,
@@ -31,7 +33,7 @@ export default function SignInForm() {
   } = useForm<TypeSchemaSignIn>({
     resolver: zodResolver(schemaSignIn),
     defaultValues: {
-      email: '',
+      email: emailFromQuery,
       password: ''
     }
   })
