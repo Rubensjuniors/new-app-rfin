@@ -83,7 +83,7 @@ model VerificationToken {
 
 model PaymentCard {
   id         String          @id @default(uuid()) @db.Uuid
-  lastDigits String
+  lastDigits String?         @map("last_digits")
   name       String
   color      String?
   icon       String?
