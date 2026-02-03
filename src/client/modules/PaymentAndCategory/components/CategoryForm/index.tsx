@@ -4,40 +4,9 @@ import { Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/client/shared/components/ui/Button'
+import { ColorPicker } from '@/client/shared/components/ui/ColorPicker'
 import { Input, Label } from '@/client/shared/components/ui/Form'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/client/shared/components/ui/Form/Select/select'
-
-// Ícones disponíveis para categorias
-const AVAILABLE_ICONS = [
-  { value: 'Briefcase', label: '💼 Trabalho' },
-  { value: 'ShoppingBag', label: '🛍️ Compras' },
-  { value: 'Utensils', label: '🍽️ Alimentação' },
-  { value: 'Car', label: '🚗 Transporte' },
-  { value: 'Home', label: '🏠 Casa' },
-  { value: 'Heart', label: '❤️ Saúde' },
-  { value: 'Gamepad2', label: '🎮 Lazer' },
-  { value: 'GraduationCap', label: '🎓 Educação' },
-  { value: 'Gift', label: '🎁 Presentes' },
-  { value: 'Wallet', label: '💰 Outros' }
-]
-
-// Cores disponíveis
-const AVAILABLE_COLORS = [
-  { value: '#22c55e', label: 'Verde' },
-  { value: '#ef4444', label: 'Vermelho' },
-  { value: '#3b82f6', label: 'Azul' },
-  { value: '#f59e0b', label: 'Amarelo' },
-  { value: '#8b5cf6', label: 'Roxo' },
-  { value: '#ec4899', label: 'Rosa' },
-  { value: '#06b6d4', label: 'Ciano' },
-  { value: '#f97316', label: 'Laranja' }
-]
+import { IconPicker } from '@/client/shared/components/ui/IconPicker'
 
 type CategoryFormData = {
   name: string
@@ -88,40 +57,9 @@ export function CategoryForm() {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-2">
-            <Label>Ícone</Label>
-            <Select value={watchedIcon} onValueChange={(value) => setValue('icon', value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {AVAILABLE_ICONS.map((icon) => (
-                  <SelectItem key={icon.value} value={icon.value}>
-                    {icon.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <IconPicker label="Ícone" value={watchedIcon} onChange={(icon) => setValue('icon', icon)} />
 
-          <div className="space-y-2">
-            <Label>Cor</Label>
-            <Select value={watchedColor} onValueChange={(value) => setValue('color', value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {AVAILABLE_COLORS.map((color) => (
-                  <SelectItem key={color.value} value={color.value}>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: color.value }} />
-                      {color.label}
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <ColorPicker label="Cor" value={watchedColor} onChange={(color) => setValue('color', color)} />
         </div>
 
         <Button type="submit" className="w-full gap-2">
