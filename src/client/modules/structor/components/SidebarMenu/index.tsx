@@ -4,11 +4,13 @@ import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 import { cn } from '@/client/lib/utils'
+import { HiddenMoneyButton } from '@/client/shared/components/HiddenValue/HiddenMoneyButton'
 import { Button } from '@/client/shared/components/ui/Button'
 import { ButtonToggleTheme } from '@/client/shared/components/ui/ButtonToggleTheme'
 
 import { ItemsSideBarMenu } from '../../constants/sidebarMenu'
 import { useSidebar } from '../../context/SideBarContext'
+import { Profile } from '../Profile'
 import { Sidebar } from '../Sidebar'
 
 export function AppSidebarMenu() {
@@ -16,6 +18,7 @@ export function AppSidebarMenu() {
   const t = useTranslations()
   const pathname = usePathname()
 
+  const locale = pathname.split('/')[1]
   const pathnameWithoutLocale = pathname.replace(/^\/(pt-br|en)/, '')
 
   return (
@@ -27,14 +30,18 @@ export function AppSidebarMenu() {
           </div>
         </Link>
 
-        <ButtonToggleTheme />
+        <div className="flex items-center gap-2">
+          <ButtonToggleTheme />
+          <HiddenMoneyButton hideOnMobile={false} />
+          <Profile hideOnMobile={false} />
+        </div>
       </Sidebar.SidebarHeader>
       <Sidebar.SidebarContent className="p-2">
         <nav className="flex flex-col gap-2">
           {ItemsSideBarMenu.map((item) => {
             const isActive = pathnameWithoutLocale === item.route
             return (
-              <Link href={item.route} key={item.name} onClick={() => setOpenMobile(false)}>
+              <Link href={`/${locale}${item.route}`} key={item.name} onClick={() => setOpenMobile(false)}>
                 <Button
                   variant="ghost"
                   className={cn(

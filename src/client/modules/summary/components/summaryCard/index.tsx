@@ -22,12 +22,12 @@ export function SummaryCard({ iconName, title, value, className, color }: Summar
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm text-muted-foreground font-medium">{t(title)}</p>
-          <p className="text-2xl font-bold mt-1" style={{ color }}>
+          <p className="text-xl sm:text-2xl font-bold mt-1" style={{ color }}>
             {isVisible ? formatCurrency(value) : '••••••••••'}
           </p>
         </div>
 
-        <IconBox iconName={iconName} color={color} />
+        <IconBox iconName={iconName} color={color}  />
       </div>
     </Card>
   )

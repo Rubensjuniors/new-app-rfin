@@ -9,7 +9,7 @@ export function AddPeymentAndCategoryButton() {
       button={
         <Button>
           <Tags />
-          <span className="hidden sm:flex">Categorias e Pagamentos</span>
+          <span className="hidden xl:flex">Categorias e Pagamentos</span>
         </Button>
       }
       content={<>ola</>}

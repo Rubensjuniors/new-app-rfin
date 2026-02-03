@@ -2,12 +2,13 @@
 import { useParams } from 'next/dist/client/components/navigation'
 import { signOut, useSession } from 'next-auth/react'
 
+import { cn } from '@/client/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/client/shared/components/ui/Avatar'
 import { Dropdown } from '@/client/shared/components/ui/Dropdown'
 import { Skeleton } from '@/client/shared/components/ui/Skeleton'
 import { Text } from '@/client/shared/components/ui/Text'
 
-export function Profile() {
+export function Profile({ hideOnMobile }: { hideOnMobile?: boolean }) {
   const { data: session, status } = useSession()
   const isLoading = status === 'loading'
   const params = useParams()
@@ -28,7 +29,14 @@ export function Profile() {
 
   return (
     <Dropdown>
-      <Dropdown.Trigger className="outline-none cursor-pointer">{profile()}</Dropdown.Trigger>
+      <Dropdown.Trigger
+        className={cn('outline-none cursor-pointer', {
+          'hidden sm:block': hideOnMobile,
+          'sm:hidden': !hideOnMobile
+        })}
+      >
+        {profile()}
+      </Dropdown.Trigger>
       <Dropdown.Content className="w-70 md:w-80 mr-4 md:mr-10 mt-8" align="start">
         <div className="p-2 flex items-center gap-3">
           {profile()}

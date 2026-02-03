@@ -7,14 +7,23 @@ import { cn } from '@/client/lib/utils'
 import { useHiddenMoneyToggle } from '../../contexts/HiddenMoneyToggleContext'
 import { Button } from '../ui/Button'
 
-export function HiddenMoneyButton({ className }: { className?: string }) {
+export function HiddenMoneyButton({
+  className,
+  hideOnMobile
+}: {
+  className?: string
+  hideOnMobile?: boolean
+}) {
   const { isVisible, toggleVisibility } = useHiddenMoneyToggle()
   return (
     <Button
       variant="ghost"
       size="icon"
       onClick={toggleVisibility}
-      className={cn('h-10 w-10 text-muted-foreground hover:text-foreground transition-colors', className)}
+      className={cn('h-10 w-10 text-muted-foreground hover:text-foreground transition-colors', className, {
+        'hidden sm:inline-flex': hideOnMobile,
+        'inline-flex sm:hidden': !hideOnMobile
+      })}
     >
       {isVisible ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
     </Button>

@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <main className="pb-6 w-full overflow-x-hidden">
             <Header />
 
-            <div className="min-w-0 max-w-6xl mx-auto overflow-x-hidden px-4">{children}</div>
+            <div className="min-w-0 max-w-6xl mx-auto overflow-x-hidden p-4">{children}</div>
           </main>
         </TransactionProvider>
       </MonthNavigationProvider>

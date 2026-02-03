@@ -11,8 +11,8 @@ export function Header() {
       <SidebarTrigger />
       <div className="flex items-center justify-end w-full max-w-6xl gap-2">
         <MonthNavigation />
-        <HiddenMoneyButton />
-        <Profile />
+        <HiddenMoneyButton hideOnMobile={true} />
+        <Profile hideOnMobile={true} />
       </div>
     </header>
   )

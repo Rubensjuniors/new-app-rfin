@@ -9,7 +9,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/Tooltip'
 const iconBoxVariants = cva('flex items-center justify-center rounded-xl shrink-0', {
   variants: {
     size: {
-      sm: 'w-12 h-12 p-3',
+      sm: 'w-10 h-10 p-3',
       md: 'w-14 h-14 p-3',
       lg: 'w-16 h-16 p-4'
     }
