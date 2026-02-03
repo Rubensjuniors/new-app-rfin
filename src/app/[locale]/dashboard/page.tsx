@@ -1,4 +1,6 @@
+import { AddPeymentAndCategoryButton } from '@/client/modules/PaymentAndCategory/components/addPeymentAndCategoryButton'
 import { Summary } from '@/client/modules/summary'
+import { AddTransactionButton } from '@/client/modules/transactions/components/addTransactionButton'
 import { QuickFilters } from '@/client/modules/transactions/components/quickFilters'
 
 export default async function Home() {
@@ -7,9 +9,12 @@ export default async function Home() {
       <Summary />
 
       <div className="space-y-6">
-        <div className="flex items-end md:items-center flex-col md:flex-row md:justify-between gap-4">
+        <div className="flex items-end lg:items-center flex-col lg:flex-row lg:justify-between gap-4">
           <QuickFilters />
-          {/* <AddTransactionSheet /> */}
+          <div>
+            <AddPeymentAndCategoryButton />
+            <AddTransactionButton />
+          </div>
         </div>
         {/* <TransactionList /> */}
       </div>

@@ -63,9 +63,9 @@ export const authOptions: NextAuthOptions = {
       if (session?.user) {
         session.user.id = token.id as string
         session.user.email = token.email as string
-        session.user.name = token.name
-        session.user.emailVerified = token.emailVerified
-        session.user.image = token.image
+        session.user.name = token.name ?? null
+        session.user.emailVerified = (token.emailVerified as Date) ?? null
+        session.user.image = (token.image as string) ?? null
         session.user.createdAt = token.createdAt as Date
         session.user.updatedAt = token.updatedAt as Date
       }

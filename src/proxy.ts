@@ -19,6 +19,12 @@ const intlMiddleware = createMiddleware({
 
 export default async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+
+  // Skip middleware for API routes completely
+  if (pathname.startsWith('/api')) {
+    return NextResponse.next()
+  }
+
   const pathnameSegments = getPathnameSegments(pathname)
   const firstSegment = pathnameSegments[0]
 
@@ -80,5 +86,14 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next (Next.js internals)
+     * - _vercel (Vercel internals)
+     * - Static files (images, fonts, etc.)
+     */
+    '/((?!api|_next/static|_next/image|_vercel|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)).*)'
+  ]
 }

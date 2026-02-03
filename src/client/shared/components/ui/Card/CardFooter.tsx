@@ -2,12 +2,17 @@ import * as React from 'react'
 
 import { cn } from '@/client/lib/utils'
 
-export function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="card-footer"
-      className={cn('flex items-center px-6 [.border-t]:pt-6', className)}
-      {...props}
-    />
-  )
-}
+export const CardFooter = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        data-slot="card-footer"
+        className={cn('flex items-center px-6 [.border-t]:pt-6', className)}
+        {...props}
+      />
+    )
+  }
+)
+
+CardFooter.displayName = 'CardFooter'

@@ -1,6 +1,6 @@
 'use client'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { createContext, type ReactNode, useCallback, useContext, useState } from 'react'
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 
 import { QuickFilterType } from '../../constants'
 
@@ -25,8 +25,12 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const filterFromUrl = (searchParams.get('quickFilter') as QuickFilterType) || QuickFilterType.ALL
-  const [currentQuickFilter, setCurrentQuickFilter] = useState<QuickFilterType>(filterFromUrl)
+  const [currentQuickFilter, setCurrentQuickFilter] = useState<QuickFilterType>(QuickFilterType.ALL)
+
+  useEffect(() => {
+    const filterFromUrl = (searchParams.get('quickFilter') as QuickFilterType) || QuickFilterType.ALL
+    setCurrentQuickFilter(filterFromUrl)
+  }, [searchParams])
 
   const handleChangeQuickFilter = useCallback(
     (value: QuickFilterType) => {
