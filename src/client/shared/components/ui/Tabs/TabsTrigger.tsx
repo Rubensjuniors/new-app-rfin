@@ -19,7 +19,7 @@ export function TabsTrigger({ className, ...props }: React.ComponentProps<typeof
           'focus-visible:ring-[3px] focus-visible:outline-1',
           'disabled:pointer-events-none disabled:opacity-50',
           'data-[state=active]:shadow-sm',
-          "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 cursor-pointer"
+          '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=\'size-\'])]:size-4 cursor-pointer'
         ].join(' '),
         className
       )}

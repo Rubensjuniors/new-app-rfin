@@ -1,4 +1,6 @@
 'use client'
+import { cn } from '@/client/lib/utils'
+
 import { Drawer, DrawerContent, DrawerTrigger } from '../ui/Drawer'
 import { Sheet } from '../ui/Sheet'
 import { SheetContent } from '../ui/Sheet/SheetContent'
@@ -6,10 +8,14 @@ import { SheetTrigger } from '../ui/Sheet/SheetTrigger'
 
 export function SidebarWithDrawer({
   button,
-  content
+  children,
+  title,
+  className
 }: {
   button: React.ReactNode
-  content: React.ReactNode
+  children: React.ReactNode
+  title: string
+  className?: string
 }) {
   return (
     <>
@@ -17,7 +23,10 @@ export function SidebarWithDrawer({
       <div className="md:hidden">
         <Drawer>
           <DrawerTrigger asChild>{button}</DrawerTrigger>
-          <DrawerContent>{content}</DrawerContent>
+          <DrawerContent className={cn('p-4', className)}>
+            <Drawer.Title>{title}</Drawer.Title>
+            {children}
+          </DrawerContent>
         </Drawer>
       </div>
 
@@ -25,7 +34,10 @@ export function SidebarWithDrawer({
       <div className="hidden md:block">
         <Sheet>
           <SheetTrigger asChild>{button}</SheetTrigger>
-          <SheetContent>{content}</SheetContent>
+          <SheetContent size="lg" className={cn('p-4', className)}>
+            <Sheet.Title>{title}</Sheet.Title>
+            {children}
+          </SheetContent>
         </Sheet>
       </div>
     </>
