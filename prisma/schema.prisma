@@ -82,12 +82,12 @@ model VerificationToken {
 }
 
 model PaymentCard {
-  id    String          @id @default(uuid()) @db.Uuid
-  bank  String
-  name  String
-  color String?
-  icon  String?
-  type  PaymentCardType
+  id         String          @id @default(uuid()) @db.Uuid
+  lastDigits String
+  name       String
+  color      String?
+  icon       String?
+  type       PaymentCardType
 
   userId String @map("user_id") @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

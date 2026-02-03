@@ -5,6 +5,7 @@ import { Button } from '@/client/shared/components/ui/Button'
 import { Tabs } from '@/client/shared/components/ui/Tabs'
 
 import { CategoryForm } from '../CategoryForm'
+import { PaymentForm } from '../PaymentForm'
 
 export function AddPeymentAndCategoryButton() {
   return (
@@ -25,7 +26,9 @@ export function AddPeymentAndCategoryButton() {
         <Tabs.Content value="categories" className="mt-3">
           <CategoryForm />
         </Tabs.Content>
-        <Tabs.Content value="payments">{/* Content for Payments */}</Tabs.Content>
+        <Tabs.Content value="payments" className="mt-3">
+          <PaymentForm />
+        </Tabs.Content>
       </Tabs>
     </SidebarWithDrawer>
   )
