@@ -14,7 +14,7 @@ export function AddPeymentAndCategoryButton() {
       button={
         <Button>
           <Tags />
-          <span className="hidden xl:flex">Categorias e Pagamentos</span>
+          <span className="xl:inline hidden">Categorias e Pagamentos</span>
         </Button>
       }
     >
