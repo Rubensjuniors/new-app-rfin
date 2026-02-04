@@ -18,10 +18,10 @@ function getClientIp(request: NextRequest): string {
 /**
  * Aplica rate limiting por IP
  */
-export async function rateLimitByIp(
-  request: NextRequest,
-  type: 'login' | 'register'
-): Promise<NextResponse | null> {
+
+type RateLimitType = 'login' | 'register' | 'create-category'
+
+export async function rateLimitByIp(request: NextRequest, type: RateLimitType): Promise<NextResponse | null> {
   const ip = getClientIp(request)
   const identifier = `${type}:${ip}`
 
@@ -54,7 +54,11 @@ export async function rateLimitByIp(
     }
   } else {
     // Fallback para desenvolvimento sem Redis
-    const limits = { login: { max: 5, window: 900000 }, register: { max: 3, window: 3600000 } }
+    const limits = {
+      login: { max: 5, window: 900000 },
+      register: { max: 3, window: 3600000 },
+      'create-category': { max: 10, window: 60000 }
+    }
     const config = limits[type]
 
     const allowed = devRateLimit(identifier, config.max, config.window)

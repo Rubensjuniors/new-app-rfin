@@ -7,6 +7,7 @@ import { Button } from '@/client/shared/components/ui/Button'
 import { ColorPicker } from '@/client/shared/components/ui/ColorPicker'
 import { Input, Label } from '@/client/shared/components/ui/Form'
 import { IconPicker } from '@/client/shared/components/ui/IconPicker'
+import { fetchApi } from '@/client/shared/utils/fetch'
 
 type CategoryFormData = {
   name: string
@@ -33,9 +34,24 @@ export function CategoryForm() {
   const watchedIcon = watch('icon')
   const watchedColor = watch('color')
 
-  const onSubmit = (data: CategoryFormData) => {
-    console.log('Dados do formulário:', data)
-    reset()
+  const onSubmit = async(data: CategoryFormData) => {
+    try {
+      const response = await fetchApi({
+        path: 'category/create',
+        method: 'POST',
+        data
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Erro ao criar categoria')
+      }
+
+      reset()
+    } catch (err) {
+      console.error('Error creating category:', err)
+    }
   }
 
   return (

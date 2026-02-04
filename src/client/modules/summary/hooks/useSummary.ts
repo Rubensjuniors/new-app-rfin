@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import { fetchApi } from '@/client/shared/utils/fetch'
+
 import { useMonthNavigation } from '../../structor/context/MonthNavigationContext'
 
 export interface SummaryData {
@@ -25,7 +27,7 @@ export function useSummary() {
           year: currentMonthAndYear.year.toString()
         })
 
-        const response = await fetch(`/api/summary?${params.toString()}`)
+        const response = await fetchApi({ path: `summary?${params.toString()}` })
 
         if (!response.ok) {
           throw new Error('Failed to fetch summary')
