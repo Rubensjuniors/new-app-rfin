@@ -15,7 +15,7 @@ type Props = {
 export const Providers = ({ children, messages, locale }: Props) => {
   return (
     <SessionProvider>
-      <NextIntlClientProvider messages={messages} locale={locale}>
+      <NextIntlClientProvider messages={messages} locale={locale} timeZone="America/Sao_Paulo">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -23,9 +23,7 @@ export const Providers = ({ children, messages, locale }: Props) => {
           storageKey="rfin-ui-theme"
           disableTransitionOnChange
         >
-          <HiddenMoneyToggleProvider>
-            {children}
-          </HiddenMoneyToggleProvider>
+          <HiddenMoneyToggleProvider>{children}</HiddenMoneyToggleProvider>
         </ThemeProvider>
       </NextIntlClientProvider>
     </SessionProvider>

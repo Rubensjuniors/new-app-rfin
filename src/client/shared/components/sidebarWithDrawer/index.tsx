@@ -34,7 +34,7 @@ export function SidebarWithDrawer({
       <div className="hidden md:block">
         <Sheet>
           <SheetTrigger asChild>{button}</SheetTrigger>
-          <SheetContent size="lg" className={cn('p-4', className)}>
+          <SheetContent size="md" className={cn('p-4', className)}>
             <Sheet.Title>{title}</Sheet.Title>
             {children}
           </SheetContent>
