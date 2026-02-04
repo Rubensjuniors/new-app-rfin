@@ -1,10 +1,8 @@
 'use client'
+import { Category } from '@prisma/client'
 import { useEffect, useState } from 'react'
 
-interface Category {
-  id: string
-  name: string
-}
+import { CategoryAndPaymentCard } from '../CategoryAndPaymentCard'
 
 export function ListCategories() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -51,10 +49,27 @@ export function ListCategories() {
   }
 
   return (
-    <>
-      {categories.map((category) => (
-        <pre key={category.id}>{category.name}</pre>
-      ))}
-    </>
+    <div className="space-y-3 mt-4">
+      <div className="flex items-center justify-between">
+        <h4 className="font-medium text-sm text-muted-foreground">
+          Categorias existentes ({categories.length})
+        </h4>
+        {/* <span className="text-xs text-muted-foreground">Total: {formatCurrency(totalExpenses)}</span> */}
+      </div>
+
+      <div className="space-y-3 overflow-y-auto max-h-[47.8vh] pr-2 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-8">
+        {categories.map((category) => (
+          <CategoryAndPaymentCard
+            key={category.id}
+            name={category.name}
+            id={category.id}
+            color={category?.color}
+            icon={category?.icon}
+            onEditCategory={() => {}}
+            onDeleteCategory={() => {}}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
